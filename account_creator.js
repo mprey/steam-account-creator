@@ -24,6 +24,7 @@ client.on('loggedOn', function(details) {
 
 user.on('loggedOn', function(details) {
   console.log('>> Logged onto new account.');
+  user.webLogOn();
   verifyEmail();
 });
 
@@ -43,7 +44,7 @@ function createAccount() {
       console.log('>> There is already an account with the username ' + username + '. Please reload the application.');
       process.exit(1);
     } else if (result == SteamUser.Steam.EResult.IllegalPassword) {
-      console.log('>> Password is too weak. Please reload the application.');
+      console.log('>> Problem with password (greater than 8 chars, too common, etc). Please reload the application.');
       process.exit(1);
     } else {
       console.log('Error while creating the account. Error code: ' + result);
@@ -76,7 +77,7 @@ function verifyEmail() {
 
 function addPhoneNumber() {
   console.log('>> Beginning phone verification...');
-  if (cookieArray.length == 0) {
+  if (typeof cookieArray == 'undefined' || cookieArray.length == 0) {
     console.log('>> ERROR! Unable to receive cookies from Steam. Closing application.');
     process.exit(1);
   } else {
@@ -113,24 +114,29 @@ function verifyPhone() {
 }
 
 function enableTwoFactor() {
-  console.log('>> Beginning 2fa authentication steps.');
-  user.enableTwoFactor(function(response) {
-    var status = response.status;
-    if (!(status == SteamUser.Steam.EResult.OK)) {
-      console.log('>> Erorr while enabling 2fa. Error code: ' + status);
-      process.exit(1);
-    } else {
-      console.log('>> Successfully requested 2fa enabling.');
-      console.log('>> Saving valuable data to 2fa_' + user.steamID.getSteamID64() + '.json');
-      fs.writeFile('2fa_' + user.steamID.getSteamID64() + '.json', JSON.stringify(response));
-      verifyTwoFactor();
-    }
-  });
+  console.log('>> In order to enable 2fa authentication, please run the 2fa_enable node file.');
+  process.exit(1);
+  /*console.log('>> Beginning 2fa authentication steps.');
+  console.log('>> Waiting 5 seconds for Steam to update...');
+  setTimeout(function() {
+    user.enableTwoFactor(function(response) {
+      var status = response.status;
+      if (!(status == SteamUser.Steam.EResult.OK)) {
+        console.log('>> Erorr while enabling 2fa. Error code: ' + status);
+        process.exit(1);
+      } else {
+        console.log('>> Successfully requested 2fa enabling.');
+        console.log('>> Saving valuable data to 2fa_' + user.steamID.getSteamID64() + '.json');
+        fs.writeFile('2fa_' + user.steamID.getSteamID64() + '.json', JSON.stringify(response));
+        verifyTwoFactor();
+      }
+    });
+  }, 5000);*/
 }
 
 function verifyTwoFactor(shared_secret) {
   console.log('>> Verifying 2fa activiation. Enter the code sent via SMS.');
-  var code = readlineSync.question('Code: ');
+  var code = readlineSync.question('Code sent by SMS: ');
   user.finalizeTwoFactor(shared_secret, code, function (err) {
     if (err) {
       console.log('>> Error while verifying 2fa. Error: ' + err.message);
