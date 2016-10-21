@@ -39,6 +39,6 @@ user.on('steamGuard', function(domain, callback, lastCodeWrong) {
 user.on('loggedOn', function(details) {
   console.log('>> Logged into the account with two-factor authentication enabled.');
   console.log('>> Thanks for using steam-account-creator');
-  console.log('>> Remeber to save the .json file provided in this directory.');
+  console.log('>> Remeber to save the .2fa file provided in this directory.');
   process.exit(1);
 });

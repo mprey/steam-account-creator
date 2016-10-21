@@ -12,7 +12,7 @@ var username, password;
 
 var cookieArray = {};
 
-console.log('---- Welcome to Steam Bot Creator v1.0 for NodeJS ----');
+console.log('---- Welcome to Steam Bot Creator ' + JSON.parse(fs.readFileSync('package.json', 'utf8')).version + ' for NodeJS ----');
 
 client.logOn();
 
