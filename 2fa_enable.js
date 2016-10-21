@@ -35,8 +35,8 @@ function enableTwoFactor() {
       process.exit(1);
     } else {
       console.log('>> Successfully requested 2fa enabling.');
-      console.log('>> Saving valuable data to 2fa_' + username + '.json');
-      fs.writeFile('2fa_' + username + '.json', JSON.stringify(response));
+      console.log('>> Saving valuable data to ' + username + '.2fa');
+      fs.writeFile(username + '.2fa', JSON.stringify(response));
       finalizeTwoFactor(response);
     }
   });
