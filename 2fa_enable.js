@@ -5,7 +5,7 @@ var SteamCommunity = require('steamcommunity');
 var readlineSync = require('readline-sync');
 var fs = require('fs');
 
-var username, password;
+var username, password, shared_secret;
 
 var user = new SteamUser();
 
@@ -51,7 +51,7 @@ function finalizeTwoFactor(response) {
       process.exit(1);
     } else {
       console.log('>> Successfully verified 2fa authentication.');
-      console.log('>> Exiting.');
+      console.log('>> Run test_login.js if you wish to test your login. (Do not remove .2fa file from this directory)');
       process.exit(1);
     }
   });

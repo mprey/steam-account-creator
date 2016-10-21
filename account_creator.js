@@ -77,9 +77,11 @@ function verifyEmail() {
 
 function addPhoneNumber() {
   console.log('>> Beginning phone verification...');
-  if (typeof cookieArray == 'undefined' || cookieArray.length == 0) {
-    console.log('>> ERROR! Unable to receive cookies from Steam. Closing application.');
-    process.exit(1);
+  if (typeof cookieArray == 'undefined' || cookieArray.length < 3) {
+    console.log('>> ERROR! Unable to receive cookies from Steam. Waiting 5 seconds to retry.');
+    setTimeout(function() {
+        addPhoneNumber();
+    }, 5000);
   } else {
     store.setCookies(cookieArray);
   }
@@ -103,6 +105,7 @@ function verifyPhone() {
   var code = readlineSync.question('Code: ');
   store.verifyPhoneNumber(code, function(err) {
     if (err) {
+      console.log(err);
       console.log('>> Error while confirming code: ' + err.message);
       console.log('>> Exiting application.');
       process.exit(1);
@@ -114,53 +117,6 @@ function verifyPhone() {
 }
 
 function enableTwoFactor() {
-  console.log('>> In order to enable 2fa authentication, please run the 2fa_enable node file.');
+  console.log('>> In order to enable two-factor authentication, please run the 2fa_enable node file.');
   process.exit(1);
-  /*console.log('>> Beginning 2fa authentication steps.');
-  console.log('>> Waiting 5 seconds for Steam to update...');
-  setTimeout(function() {
-    user.enableTwoFactor(function(response) {
-      var status = response.status;
-      if (!(status == SteamUser.Steam.EResult.OK)) {
-        console.log('>> Erorr while enabling 2fa. Error code: ' + status);
-        process.exit(1);
-      } else {
-        console.log('>> Successfully requested 2fa enabling.');
-        console.log('>> Saving valuable data to 2fa_' + user.steamID.getSteamID64() + '.json');
-        fs.writeFile('2fa_' + user.steamID.getSteamID64() + '.json', JSON.stringify(response));
-        verifyTwoFactor();
-      }
-    });
-  }, 5000);*/
 }
-
-function verifyTwoFactor(shared_secret) {
-  console.log('>> Verifying 2fa activiation. Enter the code sent via SMS.');
-  var code = readlineSync.question('Code sent by SMS: ');
-  user.finalizeTwoFactor(shared_secret, code, function (err) {
-    if (err) {
-      console.log('>> Error while verifying 2fa. Error: ' + err.message);
-      process.exit(1);
-    } else {
-      console.log('>> Successfully verified 2fa authentication.');
-      console.log('>> Attempting to login with mobile guard enabled.');
-      tryLogin(shared_secret);
-    }
-  });
-}
-
-var testClient = new SteamUser();
-
-function tryLogin(shared_secret) {
-  testClient.logOn({
-    'accountName': username,
-    'password': password,
-    'twoFactorCode': SteamTotp.generateAuthCode(shared_secret)
-  });
-}
-
-testClient.on('loggedOn', function(details) {
-  console.log('>> Logged into the account with mobile guard enabled.');
-  console.log('>> Thanks for using steam-account-creator v1.0');
-  process.exit(1);
-});
