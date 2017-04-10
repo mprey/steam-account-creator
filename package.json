@@ -1,20 +1,14 @@
 {
-  "name": "steam-account-creator",
-  "version": "1.1.1",
-  "description": "Steam account creator for NodeJS",
-  "main": "account_creator.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "mprey",
-  "license": "MIT",
-  "dependencies": {
-    "fs": "0.0.2",
-    "readline": "^1.3.0",
-    "readline-sync": "^1.4.2",
-    "steam-totp": "^1.3.0",
-    "steam-user": "^3.6.1",
-    "steamcommunity": "^3.27.2",
-    "steamstore": "^1.4.1"
-  }
+    "name": "steam-account-creator",
+    "dependencies": {
+        "electron": "^1.6.6"
+    },
+    "scripts": {
+        "start": "electron ."
+    },
+    "main": "main.js",
+    "version": "0.0.0",
+    "license": "MIT",
+    "description": "Quickly create mobile-authenticated Steam accounts with ease",
+    "author": "Mason Prey"
 }
