@@ -41,10 +41,10 @@ function createAccount() {
       console.log('>> Account created successfully.');
       initClient();
     } else if (result == SteamUser.Steam.EResult.DuplicateName) {
-      console.log('>> There is already an account with the username ' + username + '. Please reload the application.');
+      console.log('>> There is already an account with the username ' + username + '. Try again.');
       process.exit(1);
     } else if (result == SteamUser.Steam.EResult.IllegalPassword) {
-      console.log('>> Problem with password (greater than 8 chars, too common, etc). Please reload the application.');
+      console.log('>> Problem with password (greater than 8 chars, too common, etc). Try again.');
       process.exit(1);
     } else {
       console.log('Error while creating the account. Error code: ' + result);
@@ -105,7 +105,6 @@ function verifyPhone() {
   var code = readlineSync.question('Code: ');
   store.verifyPhoneNumber(code, function(err) {
     if (err) {
-      console.log(err);
       console.log('>> Error while confirming code: ' + err.message);
       console.log('>> Exiting application.');
       process.exit(1);

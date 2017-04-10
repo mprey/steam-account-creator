@@ -9,7 +9,7 @@ var username, password, shared_secret;
 
 var user = new SteamUser();
 
-console.log('2fa enabling process beginning...');
+console.log('>> 2fa enabling process beginning...');
 logOn();
 
 function logOn() {
@@ -22,8 +22,8 @@ function logOn() {
 }
 
 user.on('loggedOn', function(response) {
-  console.log('Logged onto Steam...');
-  console.log('Beginning 2fa authentication');
+  console.log('>> Logged onto Steam...');
+  console.log('>> Beginning 2fa authentication');
   enableTwoFactor();
 });
 
